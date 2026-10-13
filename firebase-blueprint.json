@@ -1,0 +1,108 @@
+{
+  "entities": {
+    "Patron": {
+      "title": "Patron",
+      "description": "Authenticated Maison Patron profile and vault credentials",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "honorific": { "type": "string", "maxLength": 100 },
+        "memberId": { "type": "string", "maxLength": 50 },
+        "tier": { "type": "string", "maxLength": 50 },
+        "stars": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "Private salon viewing appointments and vernissage bookings",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "clientHonorific": { "type": "string", "maxLength": 100 },
+        "clientEmail": { "type": "string", "maxLength": 256 },
+        "salonLocation": { "type": "string", "maxLength": 100 },
+        "preferredDate": { "type": "string", "maxLength": 50 },
+        "creationsOfInterest": { "type": "string", "maxLength": 100 },
+        "status": { "type": "string", "enum": ["confirmed", "pending", "completed", "cancelled"] },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "clientEmail", "salonLocation", "preferredDate"]
+    },
+    "VaultPiece": {
+      "title": "VaultPiece",
+      "description": "Custodial pieces and acquisitions held in patron vault",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 120 },
+        "category": { "type": "string", "maxLength": 80 },
+        "caratWeight": { "type": "string", "maxLength": 50 },
+        "specs": { "type": "string", "maxLength": 300 },
+        "valuation": { "type": "string", "maxLength": 50 },
+        "status": { "type": "string", "enum": ["custodial", "option_vip", "in_atelier"] },
+        "location": { "type": "string", "maxLength": 120 },
+        "imageUrl": { "type": "string", "maxLength": 1000 },
+        "reservedUntil": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["userId", "title", "status"]
+    },
+    "EncryptedMessage": {
+      "title": "EncryptedMessage",
+      "description": "Encrypted private liaison transmission to the head director",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "senderEmail": { "type": "string", "maxLength": 256 },
+        "nature": { "type": "string", "maxLength": 120 },
+        "message": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["dispatched", "read", "resolved"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "nature", "message"]
+    },
+    "PatronInscription": {
+      "title": "PatronInscription",
+      "description": "Confidential protocol inscription requests into Le Cercle Privé",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "honorificName": { "type": "string", "maxLength": 120 },
+        "contactEmail": { "type": "string", "maxLength": 256 },
+        "familyOfficeSponsor": { "type": "string", "maxLength": 120 },
+        "status": { "type": "string", "enum": ["pending", "reviewed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["honorificName", "contactEmail"]
+    }
+  },
+  "firestore": {
+    "/patrons/{userId}": {
+      "schema": { "$ref": "#/entities/Patron" },
+      "description": "Patron profile data"
+    },
+    "/appointments/{appointmentId}": {
+      "schema": { "$ref": "#/entities/Appointment" },
+      "description": "Private salon reservations"
+    },
+    "/vaultPieces/{pieceId}": {
+      "schema": { "$ref": "#/entities/VaultPiece" },
+      "description": "Patron custodial vault pieces"
+    },
+    "/encryptedMessages/{messageId}": {
+      "schema": { "$ref": "#/entities/EncryptedMessage" },
+      "description": "Direct encrypted concierge liaison communications"
+    },
+    "/inscriptions/{inscriptionId}": {
+      "schema": { "$ref": "#/entities/PatronInscription" },
+      "description": "Prospective patron inscription petitions"
+    }
+  }
+}
