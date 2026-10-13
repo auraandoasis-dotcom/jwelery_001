@@ -2,5 +2,7 @@
   "name": "Aurelia Haute Joaillerie",
   "description": "Sanctuaire d'art joaillier, pièces d'exception, salon privé et coffre patrimonial au 26 Place Vendôme Paris.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
