@@ -69,10 +69,31 @@ export const Header: React.FC = () => {
           >
             {user ? 'Espace Client Privé' : 'The Maison Vault'}
           </button>
+          <button 
+            className={`font-sans text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center gap-1.5 ${
+              screen === 'admin' ? 'text-[#f2ca50] border-b border-[#f2ca50] pb-1' : 'text-[#f2ca50]/90 hover:text-[#f2ca50]'
+            }`}
+            onClick={() => setScreen('admin')}
+            title="Registre & Journal des connexions et formulaires"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            Registre Admin / Logins
+          </button>
         </nav>
 
         {/* Right Actions & Utilities */}
-        <div className="flex items-center gap-4 sm:gap-6">
+        <div className="flex items-center gap-3 sm:gap-5">
+          {/* Admin quick access icon */}
+          <button 
+            type="button"
+            className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-mono text-[#f2ca50] border border-[#f2ca50]/30 hover:border-[#f2ca50] hover:bg-[#f2ca50]/10 rounded transition-colors"
+            onClick={() => setScreen('admin')}
+            title="Accéder au Registre des Connexions & Données"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="hidden sm:inline text-[10px] uppercase tracking-wider font-semibold">Registre</span>
+          </button>
+
           {/* Sound Atmospheric Toggle */}
           <button 
             type="button"

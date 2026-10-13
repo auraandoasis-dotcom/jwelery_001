@@ -11,6 +11,7 @@ import { CinematicShowcase } from './components/CinematicShowcase';
 import { SpecimenDossier } from './components/SpecimenDossier';
 import { PatronGateway } from './components/PatronGateway';
 import { PatronDashboard } from './components/PatronDashboard';
+import { AdminRegistry } from './components/AdminRegistry';
 
 const MaisonApp: React.FC = () => {
   const { screen, soundActive } = useMaison();
@@ -47,6 +48,7 @@ const MaisonApp: React.FC = () => {
         {screen === 'specimen' && <SpecimenDossier />}
         {screen === 'gateway' && <PatronGateway />}
         {screen === 'dashboard' && <PatronDashboard />}
+        {screen === 'admin' && <AdminRegistry />}
       </main>
       <Footer />
     </div>

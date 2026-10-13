@@ -81,12 +81,31 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["honorificName", "contactEmail"]
+    },
+    "PatronLogin": {
+      "title": "PatronLogin",
+      "description": "Audit record of patrons who have authenticated into the vault",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 150 },
+        "authMethod": { "type": "string", "maxLength": 50 },
+        "terminalInfo": { "type": "string", "maxLength": 200 },
+        "loginAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "email", "loginAt"]
     }
   },
   "firestore": {
     "/patrons/{userId}": {
       "schema": { "$ref": "#/entities/Patron" },
       "description": "Patron profile data"
+    },
+    "/patronLogins/{loginId}": {
+      "schema": { "$ref": "#/entities/PatronLogin" },
+      "description": "Audit logs of patrons logging in"
     },
     "/appointments/{appointmentId}": {
       "schema": { "$ref": "#/entities/Appointment" },

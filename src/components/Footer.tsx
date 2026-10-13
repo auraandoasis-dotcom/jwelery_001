@@ -130,7 +130,14 @@ export const Footer: React.FC = () => {
           <div className="font-sans text-[11px] uppercase tracking-wider">
             © 2025 Aurelia Haute Joaillerie Maison S.A. Tous Droits Réservés.
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-6">
+            <button 
+              onClick={() => setScreen('admin')}
+              className="font-sans text-[11px] uppercase text-[#f2ca50] hover:underline cursor-pointer transition-colors flex items-center gap-1.5"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              Console &amp; Registre Admin
+            </button>
             <span className="font-sans text-[11px] uppercase hover:text-[#f2ca50] cursor-pointer transition-colors">
               Instagram
             </span>

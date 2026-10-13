@@ -10,7 +10,8 @@ export const PatronDashboard: React.FC = () => {
     cancelAppointment, 
     sendSignalMessage,
     logout,
-    inspectPiece 
+    inspectPiece,
+    setScreen 
   } = useMaison();
 
   const [activeTab, setActiveTab] = useState<'all' | 'appointments' | 'vault' | 'privileges'>('all');
@@ -159,6 +160,13 @@ export const PatronDashboard: React.FC = () => {
             }`}
           >
             Vue d'Ensemble
+          </button>
+          <button
+            onClick={() => setScreen('admin')}
+            className="px-5 py-2.5 rounded font-sans text-xs uppercase tracking-[0.2em] transition-all cursor-pointer font-mono bg-[#1c1b1c] hover:bg-[#cca76a]/20 text-[#cca76a] border border-[#cca76a]/30 flex items-center gap-2"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+            Journal &amp; Registre Admin
           </button>
           <button
             onClick={() => setActiveTab('appointments')}

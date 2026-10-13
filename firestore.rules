@@ -17,6 +17,14 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
+    // Bootstrapped Admin for Maison Director
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'auraandoasis@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
     function isValidId(id) {
       return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
     }
@@ -31,42 +39,50 @@ service cloud.firestore {
 
     // Patron Profiles
     match /patrons/{userId} {
-      allow get: if isOwner(userId);
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
       allow create: if isOwner(userId) && incoming().uid == request.auth.uid;
-      allow update: if isOwner(userId) && incoming().uid == request.auth.uid;
-      allow delete: if false;
+      allow update: if (isOwner(userId) && incoming().uid == request.auth.uid) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Patron Logins Audit Log
+    match /patronLogins/{loginId} {
+      allow get, list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin();
     }
 
     // Salon Appointments
     match /appointments/{appointmentId} {
-      allow get: if isSignedIn() && (existing().userId == request.auth.uid);
-      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid);
+      allow get: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isSignedIn() && incoming().userId == request.auth.uid;
-      allow update: if isSignedIn() && existing().userId == request.auth.uid;
-      allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+      allow update: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+      allow delete: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
     }
 
     // Vault Pieces
     match /vaultPieces/{pieceId} {
-      allow get: if isSignedIn() && (existing().userId == request.auth.uid);
-      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid);
-      allow create: if isSignedIn() && incoming().userId == request.auth.uid;
-      allow update: if isSignedIn() && existing().userId == request.auth.uid;
-      allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+      allow get: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && (incoming().userId == request.auth.uid || isAdmin());
+      allow update: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+      allow delete: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
     }
 
     // Encrypted Concierge Messages
     match /encryptedMessages/{messageId} {
-      allow get, list: if isSignedIn() && (resource.data.userId == request.auth.uid);
+      allow get, list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isSignedIn() && incoming().userId == request.auth.uid;
-      allow update, delete: if false;
+      allow update, delete: if isAdmin();
     }
 
     // Patron Inscriptions
     match /inscriptions/{inscriptionId} {
       allow get, list: if isSignedIn();
       allow create: if incoming().honorificName is string && incoming().contactEmail is string;
-      allow update, delete: if false;
+      allow update, delete: if isAdmin();
     }
   }
 }
